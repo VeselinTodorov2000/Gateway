@@ -1,38 +1,31 @@
 package com.veselintodorov.gateway.service.impl;
 
 import com.veselintodorov.gateway.dto.FixerResponseDto;
-import com.veselintodorov.gateway.entity.CurrencyRate;
-import com.veselintodorov.gateway.repository.CurrencyRateRepository;
+import com.veselintodorov.gateway.service.CurrencyRateService;
 import com.veselintodorov.gateway.service.FixerFetchService;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
-import java.time.Instant;
-
 @Service
 public class FixerFetchServiceImpl implements FixerFetchService {
+    private static final Logger logger = LoggerFactory.getLogger(FixerFetchServiceImpl.class);
     private final RestTemplate restTemplate;
-    private final CurrencyRateRepository currencyRateRepository;
-    private final CacheManager cacheManager;
-
+    private final CurrencyRateService currencyRateService;
     @Value("${fixer.api.url}")
     private String fixerApiUrl;
 
-    public FixerFetchServiceImpl(RestTemplate restTemplate, CurrencyRateRepository currencyRateRepository, CacheManager cacheManager) {
+    public FixerFetchServiceImpl(RestTemplate restTemplate, CurrencyRateService currencyRateService) {
         this.restTemplate = restTemplate;
-        this.currencyRateRepository = currencyRateRepository;
-        this.cacheManager = cacheManager;
+        this.currencyRateService = currencyRateService;
     }
 
     @Override
@@ -40,16 +33,13 @@ public class FixerFetchServiceImpl implements FixerFetchService {
     public void fetchAndSaveCurrencyRates() {
         FixerResponseDto fixerResponse = fetchCurrencyRates();
         if (fixerResponse != null) {
-            saveRates(fixerResponse);
+            currencyRateService.saveRates(fixerResponse);
         } else {
             throw new RuntimeException("Failed to fetch data from Fixer.io");
         }
     }
 
-    @Retryable(
-            value = {RestClientException.class},
-            backoff = @Backoff(delay = 2000)
-    )
+    @Retryable
     private FixerResponseDto fetchCurrencyRates() {
         try {
             ResponseEntity<FixerResponseDto> response = restTemplate.getForEntity(fixerApiUrl, FixerResponseDto.class);
@@ -63,30 +53,7 @@ public class FixerFetchServiceImpl implements FixerFetchService {
     }
 
     @Recover
-    public FixerResponseDto recover(RestClientException e) {
-        //TODO change with logger
-        System.err.println("Failed to fetch data after retries: " + e.getMessage());
-        return null;
-    }
-
-    public void saveRates(FixerResponseDto fixerResponse) {
-        String baseCurrency = fixerResponse.getBase();
-        Instant timestamp = Instant.now();
-
-        fixerResponse.getRates().forEach((currency, rate) -> {
-            CurrencyRate currencyRate = new CurrencyRate();
-            currencyRate.setBaseCurrency(baseCurrency);
-            currencyRate.setCurrency(currency);
-            currencyRate.setRate(rate);
-            currencyRate.setTimestamp(timestamp);
-
-            currencyRateRepository.save(currencyRate);
-            cacheRate(currency, rate);
-        });
-    }
-
-    public void cacheRate(String currencyCode, BigDecimal currencyRate) {
-        Cache currencyRatesCache = cacheManager.getCache("currencyRatesCache");
-        currencyRatesCache.put(currencyCode, currencyRate);
+    public void recover(RestClientException e) {
+        logger.error("Failed to fetch data after retries: " + e.getMessage());
     }
 }
