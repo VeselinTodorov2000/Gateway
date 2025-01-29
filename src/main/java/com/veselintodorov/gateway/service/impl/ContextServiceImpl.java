@@ -5,6 +5,8 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class ContextServiceImpl implements ContextService {
     private final CacheManager cacheManager;
@@ -15,9 +17,18 @@ public class ContextServiceImpl implements ContextService {
 
     @Override
     public String baseCurrency() {
-        Cache currencyRatesCache = cacheManager.getCache("baseCurrency");
+        Cache currencyRatesCache = cacheManager.getCache("currencyRates");
         if(currencyRatesCache != null) {
             return currencyRatesCache.get("baseCurrency", String.class);
+        }
+        throw new RuntimeException("No currency rates cache found");
+    }
+
+    @Override
+    public BigDecimal findByCurrencyCode(String currencyCode) {
+        Cache currencyRatesCache = cacheManager.getCache("currencyRates");
+        if(currencyRatesCache != null) {
+            return currencyRatesCache.get(currencyCode, BigDecimal.class);
         }
         throw new RuntimeException("No currency rates cache found");
     }

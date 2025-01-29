@@ -1,8 +1,9 @@
 package com.veselintodorov.gateway.fixture;
 
 import com.veselintodorov.gateway.dto.JsonResponseDto;
-import com.veselintodorov.gateway.entity.CurrencyRate;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Map;
 
 public class JsonResponseDtoFixture {
@@ -12,12 +13,12 @@ public class JsonResponseDtoFixture {
         return responseDto;
     }
 
-    public static JsonResponseDto responseByCurrencyRate(CurrencyRate currencyRate) {
+    public static JsonResponseDto responseByCurrencyRate(String currencyCode, BigDecimal currencyRate, String baseCurrency) {
         JsonResponseDto responseDto = new JsonResponseDto();
         responseDto.setSuccess(true);
-        responseDto.setBaseCurrency(currencyRate.getBaseCurrency());
-        responseDto.setCurrencyCode(currencyRate.getCurrency());
-        responseDto.setRates(Map.of(currencyRate.getTimestamp(), currencyRate.getRate()));
+        responseDto.setBaseCurrency(baseCurrency);
+        responseDto.setCurrencyCode(currencyCode);
+        responseDto.setRates(Map.of(Instant.now(), currencyRate));
         return responseDto;
     }
 }
