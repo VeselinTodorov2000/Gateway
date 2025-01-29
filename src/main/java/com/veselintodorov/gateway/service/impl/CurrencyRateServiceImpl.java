@@ -2,6 +2,7 @@ package com.veselintodorov.gateway.service.impl;
 
 import com.veselintodorov.gateway.dto.FixerResponseDto;
 import com.veselintodorov.gateway.entity.CurrencyRate;
+import com.veselintodorov.gateway.handler.CurrencyNotFoundException;
 import com.veselintodorov.gateway.repository.CurrencyRateRepository;
 import com.veselintodorov.gateway.service.CurrencyRateService;
 import jakarta.transaction.Transactional;
@@ -11,11 +12,13 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Optional;
 
 @Service
 public class CurrencyRateServiceImpl implements CurrencyRateService {
     private final CurrencyRateRepository currencyRateRepository;
     private final CacheManager cacheManager;
+
 
     public CurrencyRateServiceImpl(CurrencyRateRepository currencyRateRepository, CacheManager cacheManager) {
         this.currencyRateRepository = currencyRateRepository;
@@ -38,6 +41,16 @@ public class CurrencyRateServiceImpl implements CurrencyRateService {
             currencyRateRepository.save(currencyRate);
             cacheRate(currency, rate);
         });
+    }
+
+    @Override
+    public CurrencyRate findLatestCurrencyRateForBaseByCurrencyCode(String currencyCode) throws CurrencyNotFoundException {
+        Optional<CurrencyRate> currencyRate = currencyRateRepository.findLatestByCurrencyAndBaseCurrency(currencyCode);
+        if (currencyRate.isPresent()) {
+            return currencyRate.get();
+        } else {
+            throw new CurrencyNotFoundException("Currency " + currencyCode + " is not found");
+        }
     }
 
     public void cacheRate(String currencyCode, BigDecimal currencyRate) {
