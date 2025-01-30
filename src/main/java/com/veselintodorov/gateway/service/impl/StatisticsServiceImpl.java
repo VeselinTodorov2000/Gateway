@@ -9,7 +9,6 @@ import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.UUID;
 
 @Service
 public class StatisticsServiceImpl implements StatisticsService {
@@ -29,11 +28,11 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public boolean requestAlreadyExists(UUID requestUuid) {
+    public boolean requestAlreadyExists(String requestId) {
         Cache cache = cacheManager.getCache("requestLog");
-        if (cache != null && Boolean.TRUE.equals(cache.get(requestUuid, Boolean.class))) {
+        if (cache != null && Boolean.TRUE.equals(cache.get(requestId, Boolean.class))) {
             return true;
         }
-        return requestLogRepository.findByRequestId(requestUuid.toString()).isPresent();
+        return requestLogRepository.findByRequestId(requestId).isPresent();
     }
 }

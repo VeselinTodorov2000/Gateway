@@ -11,7 +11,7 @@ public class JsonRequestDto {
     @JsonProperty(value = "timestamp", required = true)
     private Instant timestamp;
     @JsonProperty(value = "client", required = true)
-    private Long clientId;
+    private String clientId;
     @JsonProperty(value = "currency", required = true)
     private String currencyCode;
     @JsonProperty(value = "period", required = false)
@@ -36,11 +36,11 @@ public class JsonRequestDto {
         this.timestamp = timestamp;
     }
 
-    public Long getClientId() {
+    public String getClientId() {
         return clientId;
     }
 
-    public void setClientId(Long clientId) {
+    public void setClientId(String clientId) {
         this.clientId = clientId;
     }
 

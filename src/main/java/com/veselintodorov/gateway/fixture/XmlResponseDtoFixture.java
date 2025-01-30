@@ -1,0 +1,36 @@
+package com.veselintodorov.gateway.fixture;
+
+import com.veselintodorov.gateway.dto.xml.RateEntry;
+import com.veselintodorov.gateway.dto.xml.XmlResponseDto;
+import com.veselintodorov.gateway.entity.CurrencyRate;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
+
+public class XmlResponseDtoFixture {
+    public static XmlResponseDto failureResponse() {
+        XmlResponseDto responseDto = new XmlResponseDto();
+        responseDto.setSuccess(false);
+        return responseDto;
+    }
+
+    public static XmlResponseDto responseByCurrencyRate(String currencyCode, BigDecimal currencyRate, String baseCurrency) {
+        XmlResponseDto responseDto = new XmlResponseDto();
+        responseDto.setSuccess(true);
+        responseDto.setBaseCurrency(baseCurrency);
+        responseDto.setCurrency(currencyCode);
+        responseDto.setRates(Collections.singletonList(new RateEntry(Instant.now(), currencyRate)));
+        return responseDto;
+    }
+
+    public static XmlResponseDto historyResponseByCurrencyRates(String currencyCode, List<CurrencyRate> rates, String baseCurrency) {
+        XmlResponseDto responseDto = new XmlResponseDto();
+        responseDto.setSuccess(true);
+        responseDto.setBaseCurrency(baseCurrency);
+        responseDto.setCurrency(currencyCode);
+        responseDto.setRates(rates.stream().map(rate -> new RateEntry(rate.getTimestamp(), rate.getRate())).toList());
+        return responseDto;
+    }
+}

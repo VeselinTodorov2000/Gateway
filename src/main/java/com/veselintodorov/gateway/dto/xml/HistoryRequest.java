@@ -4,13 +4,24 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class HistoryRequest extends BaseRequest {
     @JacksonXmlProperty(isAttribute = true)
-    private int period;
+    private Long period;
 
-    public int getPeriod() {
+    @JacksonXmlProperty(isAttribute = false)
+    private String currency;
+
+    public Long getPeriod() {
         return period;
     }
 
-    public void setPeriod(int period) {
+    public void setPeriod(Long period) {
         this.period = period;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }

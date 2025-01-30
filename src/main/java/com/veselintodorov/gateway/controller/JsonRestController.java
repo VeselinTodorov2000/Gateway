@@ -58,7 +58,7 @@ public class JsonRestController {
         }
         try {
             statisticsService.saveJsonRequest(jsonConverter.mapRequestDtoToEntity(dto));
-            List<CurrencyRate> ratesForLastHours = currencyRateService.getRatesForLastHours(dto.getCurrencyCode(), dto.getHours());
+            List<CurrencyRate> ratesForLastHours = currencyRateService.getRatesForLastHours(dto.getCurrencyCode(), dto.getTimestamp(), dto.getHours());
             return ResponseEntity.ok().body(historyResponseByCurrencyRates(dto.getCurrencyCode(), ratesForLastHours, contextService.baseCurrency()));
         } catch (CurrencyNotFoundException e) {
             return ResponseEntity.badRequest().body(failureResponse());
@@ -66,6 +66,6 @@ public class JsonRestController {
     }
 
     private boolean requestExists(UUID requestUuid) {
-        return statisticsService.requestAlreadyExists(requestUuid);
+        return statisticsService.requestAlreadyExists(requestUuid.toString());
     }
 }

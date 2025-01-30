@@ -12,6 +12,11 @@ public class RateEntry {
     @JacksonXmlProperty(isAttribute = true, localName = "value")
     private BigDecimal value;
 
+    public RateEntry(Instant timestamp, BigDecimal value) {
+        this.timestamp = timestamp;
+        this.value = value;
+    }
+
     public Instant getTimestamp() {
         return timestamp;
     }

@@ -17,7 +17,7 @@ public class RequestLog {
     @Column(name = "time", nullable = false)
     private Instant time;
     @Column(name = "client", nullable = false)
-    private Long clientId;
+    private String clientId;
 
     public RequestLog() {
     }
@@ -54,11 +54,11 @@ public class RequestLog {
         this.time = time;
     }
 
-    public Long getClientId() {
+    public String getClientId() {
         return clientId;
     }
 
-    public void setClientId(Long clientId) {
+    public void setClientId(String clientId) {
         this.clientId = clientId;
     }
 }

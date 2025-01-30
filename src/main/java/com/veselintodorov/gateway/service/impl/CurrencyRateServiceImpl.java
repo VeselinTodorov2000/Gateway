@@ -53,8 +53,8 @@ public class CurrencyRateServiceImpl implements CurrencyRateService {
     }
 
     @Override
-    public List<CurrencyRate> getRatesForLastHours(String currencyCode, Long hours) throws CurrencyNotFoundException {
-        Instant timeThreshold = Instant.now().minus(hours, ChronoUnit.HOURS);
+    public List<CurrencyRate> getRatesForLastHours(String currencyCode, Instant timestamp, Long hours) throws CurrencyNotFoundException {
+        Instant timeThreshold = timestamp.minus(hours, ChronoUnit.HOURS);
         List<CurrencyRate> rates = currencyRateRepository.findRecentByCurrencyAndBaseCurrency(currencyCode, contextService.baseCurrency(), timeThreshold);
         if(rates.isEmpty()) {
             throw new CurrencyNotFoundException((currencyCode));
