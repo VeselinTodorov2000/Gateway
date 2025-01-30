@@ -1,7 +1,7 @@
 package com.veselintodorov.gateway.converter.impl;
 
 import com.veselintodorov.gateway.converter.JsonConverter;
-import com.veselintodorov.gateway.dto.JsonRequestDto;
+import com.veselintodorov.gateway.dto.json.JsonRequestDto;
 import com.veselintodorov.gateway.entity.RequestLog;
 import org.springframework.stereotype.Service;
 

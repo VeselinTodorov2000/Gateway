@@ -1,6 +1,6 @@
 package com.veselintodorov.gateway.fixture;
 
-import com.veselintodorov.gateway.dto.JsonResponseDto;
+import com.veselintodorov.gateway.dto.json.JsonResponseDto;
 import com.veselintodorov.gateway.entity.CurrencyRate;
 
 import java.math.BigDecimal;

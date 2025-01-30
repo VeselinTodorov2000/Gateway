@@ -1,4 +1,4 @@
-package com.veselintodorov.gateway.dto;
+package com.veselintodorov.gateway.dto.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

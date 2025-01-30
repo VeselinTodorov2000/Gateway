@@ -3,7 +3,6 @@ package com.veselintodorov.gateway.entity;
 import jakarta.persistence.*;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Entity
 @Table(name = "statistics_request_log")
@@ -13,7 +12,7 @@ public class RequestLog {
     private Long id;
     @Column(name = "service_name", nullable = false)
     private String serviceName;
-    @Column(name = "requestId", nullable = false)
+    @Column(name = "requestId", unique = true, nullable = false)
     private String requestId;
     @Column(name = "time", nullable = false)
     private Instant time;

@@ -1,8 +1,8 @@
 package com.veselintodorov.gateway.controller;
 
 import com.veselintodorov.gateway.converter.JsonConverter;
-import com.veselintodorov.gateway.dto.JsonRequestDto;
-import com.veselintodorov.gateway.dto.JsonResponseDto;
+import com.veselintodorov.gateway.dto.json.JsonRequestDto;
+import com.veselintodorov.gateway.dto.json.JsonResponseDto;
 import com.veselintodorov.gateway.entity.CurrencyRate;
 import com.veselintodorov.gateway.handler.CurrencyNotFoundException;
 import com.veselintodorov.gateway.service.ContextService;
@@ -20,9 +20,10 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.veselintodorov.gateway.fixture.JsonResponseDtoFixture.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(path = "/json_api", consumes = "application/json", produces = "application/json")
+@RequestMapping(path = "/json_api", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 public class JsonRestController {
     private final StatisticsService statisticsService;
     private final CurrencyRateService currencyRateService;
