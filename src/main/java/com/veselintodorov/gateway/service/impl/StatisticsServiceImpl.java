@@ -34,6 +34,6 @@ public class StatisticsServiceImpl implements StatisticsService {
         if (cache != null && Boolean.TRUE.equals(cache.get(requestUuid, Boolean.class))) {
             return true;
         }
-        return requestLogRepository.findByRequestId(requestUuid).isPresent();
+        return requestLogRepository.findByRequestId(requestUuid.toString()).isPresent();
     }
 }

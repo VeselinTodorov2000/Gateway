@@ -10,7 +10,7 @@ public class JsonConverterImpl implements JsonConverter {
     @Override
     public RequestLog mapRequestDtoToEntity(JsonRequestDto dto) {
         RequestLog requestLog = new RequestLog();
-        requestLog.setRequestId(dto.getRequestId());
+        requestLog.setRequestId(dto.getRequestId().toString());
         requestLog.setClientId(dto.getClientId());
         requestLog.setTime(dto.getTimestamp());
         requestLog.setServiceName("Service 1");

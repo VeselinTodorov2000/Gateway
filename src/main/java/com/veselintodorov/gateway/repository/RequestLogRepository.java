@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface RequestLogRepository extends JpaRepository<RequestLog, Long> {
-    Optional<RequestLog> findByRequestId(UUID requestId);
+    Optional<RequestLog> findByRequestId(String requestId);
 }

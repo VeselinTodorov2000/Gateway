@@ -7,23 +7,20 @@ import com.veselintodorov.gateway.repository.CurrencyRateRepository;
 import com.veselintodorov.gateway.service.ContextService;
 import com.veselintodorov.gateway.service.CurrencyRateService;
 import jakarta.transaction.Transactional;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 public class CurrencyRateServiceImpl implements CurrencyRateService {
     private final CurrencyRateRepository currencyRateRepository;
-    private final CacheManager cacheManager;
     private final ContextService contextService;
 
-
-    public CurrencyRateServiceImpl(CurrencyRateRepository currencyRateRepository, CacheManager cacheManager, ContextService contextService) {
+    public CurrencyRateServiceImpl(CurrencyRateRepository currencyRateRepository, ContextService contextService) {
         this.currencyRateRepository = currencyRateRepository;
-        this.cacheManager = cacheManager;
         this.contextService = contextService;
     }
 
@@ -41,22 +38,27 @@ public class CurrencyRateServiceImpl implements CurrencyRateService {
             currencyRate.setTimestamp(timestamp);
 
             currencyRateRepository.save(currencyRate);
-            cacheRate(currency, rate);
+            contextService.saveCurrencyRate(currency, rate);
         });
     }
 
     @Override
     public BigDecimal findLatestCurrencyRateForBaseByCurrencyCode(String currencyCode) throws CurrencyNotFoundException {
-        if (contextService.findByCurrencyCode(currencyCode) != null) {
-            return contextService.findByCurrencyCode(currencyCode);
+        if (contextService.findRateByCurrencyCode(currencyCode) != null) {
+            return contextService.findRateByCurrencyCode(currencyCode);
         }
-        return currencyRateRepository.findLatestByCurrencyAndBaseCurrency(currencyCode)
+        return currencyRateRepository.findLatestByCurrencyAndBaseCurrency(currencyCode, contextService.baseCurrency())
                 .map(CurrencyRate::getRate)
                 .orElseThrow(() -> new CurrencyNotFoundException(currencyCode));
     }
 
-    public void cacheRate(String currencyCode, BigDecimal currencyRate) {
-        Cache currencyRatesCache = cacheManager.getCache("currencyRatesCache");
-        currencyRatesCache.put(currencyCode, currencyRate);
+    @Override
+    public List<CurrencyRate> getRatesForLastHours(String currencyCode, Long hours) throws CurrencyNotFoundException {
+        Instant timeThreshold = Instant.now().minus(hours, ChronoUnit.HOURS);
+        List<CurrencyRate> rates = currencyRateRepository.findRecentByCurrencyAndBaseCurrency(currencyCode, contextService.baseCurrency(), timeThreshold);
+        if(rates.isEmpty()) {
+            throw new CurrencyNotFoundException((currencyCode));
+        }
+        return rates;
     }
 }

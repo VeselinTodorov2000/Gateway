@@ -25,11 +25,19 @@ public class ContextServiceImpl implements ContextService {
     }
 
     @Override
-    public BigDecimal findByCurrencyCode(String currencyCode) {
+    public BigDecimal findRateByCurrencyCode(String currencyCode) {
         Cache currencyRatesCache = cacheManager.getCache("currencyRates");
         if(currencyRatesCache != null) {
             return currencyRatesCache.get(currencyCode, BigDecimal.class);
         }
         throw new RuntimeException("No currency rates cache found");
+    }
+
+    @Override
+    public void saveCurrencyRate(String currencyCode, BigDecimal currencyRate) {
+        Cache currencyRatesCache = cacheManager.getCache("currencyRatesCache");
+        if(currencyRatesCache != null) {
+            currencyRatesCache.put(currencyCode, currencyRate);
+        }
     }
 }

@@ -14,7 +14,7 @@ public class RequestLog {
     @Column(name = "service_name", nullable = false)
     private String serviceName;
     @Column(name = "requestId", nullable = false)
-    private UUID requestId;
+    private String requestId;
     @Column(name = "time", nullable = false)
     private Instant time;
     @Column(name = "client", nullable = false)
@@ -39,11 +39,11 @@ public class RequestLog {
         this.serviceName = serviceName;
     }
 
-    public UUID getRequestId() {
+    public String getRequestId() {
         return requestId;
     }
 
-    public void setRequestId(UUID requestId) {
+    public void setRequestId(String requestId) {
         this.requestId = requestId;
     }
 
