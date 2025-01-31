@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
+import static com.veselintodorov.gateway.businessEnum.ServiceType.EXTERNAL_SERVICE_XML;
+
 @Service
 public class XmlConverterImpl implements XmlConverter {
     @Override
@@ -15,15 +17,14 @@ public class XmlConverterImpl implements XmlConverter {
         requestLog.setRequestId(dto.getId());
         requestLog.setClientId(findClientId(dto));
         requestLog.setTime(Instant.now());
-        requestLog.setServiceName("Service 2");
+        requestLog.setServiceName(EXTERNAL_SERVICE_XML.getName());
         return requestLog;
     }
 
     private String findClientId(XmlRequestDto dto) {
-        if(dto.getGetRequest() != null) {
+        if (dto.getGetRequest() != null) {
             return dto.getGetRequest().getConsumer();
-        }
-        else {
+        } else {
             return dto.getHistoryRequest().getConsumer();
         }
     }

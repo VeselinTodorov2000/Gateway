@@ -2,6 +2,8 @@ package com.veselintodorov.gateway.fixture;
 
 import com.veselintodorov.gateway.dto.json.JsonResponseDto;
 import com.veselintodorov.gateway.entity.CurrencyRate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -10,10 +12,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class JsonResponseDtoFixture {
-    public static JsonResponseDto failureResponse() {
+    public static ResponseEntity<JsonResponseDto> failureResponse() {
         JsonResponseDto responseDto = new JsonResponseDto();
         responseDto.setSuccess(false);
-        return responseDto;
+        return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
     }
 
     public static JsonResponseDto responseByCurrencyRate(String currencyCode, BigDecimal currencyRate, String baseCurrency) {

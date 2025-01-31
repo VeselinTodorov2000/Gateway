@@ -5,6 +5,8 @@ import com.veselintodorov.gateway.dto.json.JsonRequestDto;
 import com.veselintodorov.gateway.entity.RequestLog;
 import org.springframework.stereotype.Service;
 
+import static com.veselintodorov.gateway.businessEnum.ServiceType.EXTERNAL_SERVICE_JSON;
+
 @Service
 public class JsonConverterImpl implements JsonConverter {
     @Override
@@ -13,7 +15,7 @@ public class JsonConverterImpl implements JsonConverter {
         requestLog.setRequestId(dto.getRequestId().toString());
         requestLog.setClientId(dto.getClientId());
         requestLog.setTime(dto.getTimestamp());
-        requestLog.setServiceName("Service 1");
+        requestLog.setServiceName(EXTERNAL_SERVICE_JSON.getName());
         return requestLog;
     }
 }

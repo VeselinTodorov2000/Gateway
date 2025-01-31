@@ -22,7 +22,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     @Transactional
-    public void saveJsonRequest(RequestLog requestLog) {
+    public void saveRequest(RequestLog requestLog) {
         requestLogRepository.save(requestLog);
         Objects.requireNonNull(cacheManager.getCache("requestLog")).put(requestLog.getRequestId(), true);
     }

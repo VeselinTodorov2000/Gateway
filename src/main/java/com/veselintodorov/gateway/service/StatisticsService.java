@@ -3,7 +3,7 @@ package com.veselintodorov.gateway.service;
 import com.veselintodorov.gateway.entity.RequestLog;
 
 public interface StatisticsService {
-    void saveJsonRequest(RequestLog requestLog);
+    void saveRequest(RequestLog requestLog);
 
     boolean requestAlreadyExists(String requestId);
 }

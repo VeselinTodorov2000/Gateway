@@ -3,17 +3,20 @@ package com.veselintodorov.gateway.fixture;
 import com.veselintodorov.gateway.dto.xml.RateEntry;
 import com.veselintodorov.gateway.dto.xml.XmlResponseDto;
 import com.veselintodorov.gateway.entity.CurrencyRate;
+import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
 public class XmlResponseDtoFixture {
-    public static XmlResponseDto failureResponse() {
+    public static ResponseEntity<XmlResponseDto> failureResponse() {
         XmlResponseDto responseDto = new XmlResponseDto();
         responseDto.setSuccess(false);
-        return responseDto;
+        return new ResponseEntity<>(responseDto, BAD_REQUEST);
     }
 
     public static XmlResponseDto responseByCurrencyRate(String currencyCode, BigDecimal currencyRate, String baseCurrency) {
