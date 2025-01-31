@@ -11,11 +11,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 public class JsonResponseDtoFixture {
     public static ResponseEntity<JsonResponseDto> failureResponse() {
         JsonResponseDto responseDto = new JsonResponseDto();
         responseDto.setSuccess(false);
         return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+    }
+
+    public static ResponseEntity<JsonResponseDto> noCurrencyFoundResponse(String currencyCodeFailureMessage) {
+        JsonResponseDto responseDto = new JsonResponseDto();
+        responseDto.setSuccess(false);
+        responseDto.setCurrencyCode(currencyCodeFailureMessage);
+        return new ResponseEntity<>(responseDto, NOT_FOUND);
     }
 
     public static JsonResponseDto responseByCurrencyRate(String currencyCode, BigDecimal currencyRate, String baseCurrency) {

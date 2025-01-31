@@ -1,11 +1,19 @@
 package com.veselintodorov.gateway.service;
 
+import com.veselintodorov.gateway.entity.CurrencyRate;
+
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 
 public interface ContextService {
     String baseCurrency();
 
-    BigDecimal findRateByCurrencyCode(String currencyCode);
+    Optional<BigDecimal> findRateByCurrencyCode(String currencyCode);
 
-    void saveCurrencyRate(String currencyCode, BigDecimal currencyRate);
+    boolean findRequestById(String requestId);
+
+    void saveRequestById(String requestId);
+
+    void saveCurrencyRates(List<CurrencyRate> currencyRates);
 }

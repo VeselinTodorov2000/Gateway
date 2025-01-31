@@ -11,12 +11,20 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 public class XmlResponseDtoFixture {
     public static ResponseEntity<XmlResponseDto> failureResponse() {
         XmlResponseDto responseDto = new XmlResponseDto();
         responseDto.setSuccess(false);
         return new ResponseEntity<>(responseDto, BAD_REQUEST);
+    }
+
+    public static ResponseEntity<XmlResponseDto> noCurrencyFoundResponse(String currencyCodeFailureMessage) {
+        XmlResponseDto responseDto = new XmlResponseDto();
+        responseDto.setSuccess(false);
+        responseDto.setCurrency(currencyCodeFailureMessage);
+        return new ResponseEntity<>(responseDto, NOT_FOUND);
     }
 
     public static XmlResponseDto responseByCurrencyRate(String currencyCode, BigDecimal currencyRate, String baseCurrency) {

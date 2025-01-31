@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 import static com.veselintodorov.gateway.fixture.JsonResponseDtoFixture.failureResponse;
+import static com.veselintodorov.gateway.fixture.JsonResponseDtoFixture.noCurrencyFoundResponse;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -35,9 +36,9 @@ public class JsonRestController {
         }
         jsonFacade.saveRequest(dto);
         try {
-            return ResponseEntity.ok().body(jsonFacade.findCurrentRate(dto));
+            return new ResponseEntity<>(jsonFacade.findCurrentRate(dto), CREATED);
         } catch (CurrencyNotFoundException e) {
-            return failureResponse();
+            return noCurrencyFoundResponse(e.getMessage());
         }
     }
 
@@ -49,7 +50,7 @@ public class JsonRestController {
         try {
             return new ResponseEntity<>(jsonFacade.findHistoryRate(dto), CREATED);
         } catch (CurrencyNotFoundException e) {
-            return failureResponse();
+            return noCurrencyFoundResponse(e.getMessage());
         }
     }
 
