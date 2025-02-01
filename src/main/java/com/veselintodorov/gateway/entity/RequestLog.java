@@ -2,11 +2,12 @@ package com.veselintodorov.gateway.entity;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Entity
 @Table(name = "statistics_request_log")
-public class RequestLog {
+public class RequestLog implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
