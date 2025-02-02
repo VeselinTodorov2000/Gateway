@@ -1,7 +1,7 @@
 package com.veselintodorov.gateway.service.impl;
 
 import com.veselintodorov.gateway.dto.FixerResponseDto;
-import com.veselintodorov.gateway.service.CurrencyRateService;
+import com.veselintodorov.gateway.facade.FixerFacade;
 import com.veselintodorov.gateway.service.FixerFetchService;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -21,14 +21,14 @@ import java.util.Optional;
 public class FixerFetchServiceImpl implements FixerFetchService {
     private static final Logger logger = LoggerFactory.getLogger(FixerFetchServiceImpl.class);
     private final RestTemplate restTemplate;
-    private final CurrencyRateService currencyRateService;
+    private final FixerFacade fixerFacade;
 
     @Value("${fixer.api.url}")
     private String fixerApiUrl;
 
-    public FixerFetchServiceImpl(RestTemplate restTemplate, CurrencyRateService currencyRateService) {
+    public FixerFetchServiceImpl(RestTemplate restTemplate, FixerFacade fixerFacade) {
         this.restTemplate = restTemplate;
-        this.currencyRateService = currencyRateService;
+        this.fixerFacade = fixerFacade;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class FixerFetchServiceImpl implements FixerFetchService {
     public void fetchAndSaveCurrencyRates() {
         Optional<FixerResponseDto> fixerResponse = fetchCurrencyRates();
         fixerResponse.ifPresentOrElse(
-                currencyRateService::saveRates,
+                fixerFacade::saveRates,
                 () -> logger.error("Failed to fetch data from Fixer.io - No data available")
         );
     }

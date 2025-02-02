@@ -1,6 +1,5 @@
 package com.veselintodorov.gateway.service.impl;
 
-import com.veselintodorov.gateway.dto.FixerResponseDto;
 import com.veselintodorov.gateway.entity.CurrencyRate;
 import com.veselintodorov.gateway.handler.CurrencyNotFoundException;
 import com.veselintodorov.gateway.repository.CurrencyRateRepository;
@@ -14,7 +13,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CurrencyRateServiceImpl implements CurrencyRateService {
@@ -28,22 +26,10 @@ public class CurrencyRateServiceImpl implements CurrencyRateService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void saveRates(FixerResponseDto fixerResponse) {
-        String baseCurrency = fixerResponse.getBase();
-        Instant timestamp = Instant.now();
-        List<CurrencyRate> currencyRates = fixerResponse.getRates().entrySet().stream()
-                .map(entry -> {
-                    CurrencyRate currencyRate = new CurrencyRate();
-                    currencyRate.setBaseCurrency(baseCurrency);
-                    currencyRate.setCurrency(entry.getKey());
-                    currencyRate.setRate(entry.getValue());
-                    currencyRate.setTimestamp(timestamp);
-                    return currencyRate;
-                })
-                .collect(Collectors.toList());
-
+    public void saveRates(List<CurrencyRate> currencyRates, String baseCurrency) {
         currencyRateRepository.saveAll(currencyRates);
         contextService.saveCurrencyRates(currencyRates);
+        contextService.saveBaseCurrency(baseCurrency);
     }
 
     @Override

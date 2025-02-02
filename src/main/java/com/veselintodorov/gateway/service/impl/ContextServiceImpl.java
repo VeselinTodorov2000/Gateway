@@ -29,6 +29,13 @@ public class ContextServiceImpl implements ContextService {
     }
 
     @Override
+    public void saveBaseCurrency(String baseCurrency) {
+        if (currencyRatesCache != null) {
+            currencyRatesCache.put("baseCurrency", baseCurrency);
+        }
+    }
+
+    @Override
     public Optional<BigDecimal> findRateByCurrencyCode(String currencyCode) {
         if (currencyRatesCache != null) {
             return Optional.ofNullable(currencyRatesCache.get(currencyCode, BigDecimal.class));

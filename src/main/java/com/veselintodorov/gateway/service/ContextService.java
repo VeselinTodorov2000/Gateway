@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface ContextService {
     String baseCurrency();
 
+    void saveBaseCurrency(String baseCurrency);
+
     Optional<BigDecimal> findRateByCurrencyCode(String currencyCode);
 
     boolean findRequestById(String requestId);
