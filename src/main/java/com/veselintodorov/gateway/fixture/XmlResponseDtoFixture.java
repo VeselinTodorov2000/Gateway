@@ -17,6 +17,7 @@ public class XmlResponseDtoFixture {
     public static ResponseEntity<XmlResponseDto> failureResponse() {
         XmlResponseDto responseDto = new XmlResponseDto();
         responseDto.setSuccess(false);
+        responseDto.setCurrency("Request already exists");
         return new ResponseEntity<>(responseDto, BAD_REQUEST);
     }
 

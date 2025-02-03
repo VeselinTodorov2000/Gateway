@@ -17,6 +17,7 @@ public class JsonResponseDtoFixture {
     public static ResponseEntity<JsonResponseDto> failureResponse() {
         JsonResponseDto responseDto = new JsonResponseDto();
         responseDto.setSuccess(false);
+        responseDto.setCurrencyCode("Request already exists");
         return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
     }
 

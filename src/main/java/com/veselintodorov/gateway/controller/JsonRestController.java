@@ -47,6 +47,7 @@ public class JsonRestController {
         if (requestExists(dto.getRequestId())) {
             return failureResponse();
         }
+        jsonFacade.saveRequest(dto);
         try {
             return new ResponseEntity<>(jsonFacade.findHistoryRate(dto), CREATED);
         } catch (CurrencyNotFoundException e) {
