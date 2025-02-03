@@ -9,6 +9,7 @@ import com.veselintodorov.gateway.handler.CurrencyNotFoundException;
 import com.veselintodorov.gateway.service.ContextService;
 import com.veselintodorov.gateway.service.CurrencyRateService;
 import com.veselintodorov.gateway.service.StatisticsService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -33,6 +34,7 @@ public class JsonFacadeImpl implements JsonFacade {
     }
 
     @Override
+    @Transactional
     public void saveRequest(JsonRequestDto requestDto) {
         statisticsService.saveRequest(jsonConverter.mapRequestDtoToEntity(requestDto));
     }

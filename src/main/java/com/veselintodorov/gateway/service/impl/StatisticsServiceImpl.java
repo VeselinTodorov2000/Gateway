@@ -21,11 +21,11 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public void saveRequest(RequestLog requestLog) {
         requestLogRepository.save(requestLog);
-        contextService.saveRequestById(requestLog.getRequestId());
         statisticsPublisherService.sendRequestLog(requestLog);
+        contextService.saveRequestById(requestLog.getRequestId());
     }
 
     @Override

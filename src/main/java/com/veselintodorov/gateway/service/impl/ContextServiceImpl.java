@@ -16,8 +16,8 @@ public class ContextServiceImpl implements ContextService {
     private final Cache requestLogCache;
 
     public ContextServiceImpl(CacheManager cacheManager) {
-        this.currencyRatesCache = cacheManager.getCache("currencyRates");
-        this.requestLogCache = cacheManager.getCache("requestLog");
+        this.currencyRatesCache = cacheManager.getCache("currencyRatesCache");
+        this.requestLogCache = cacheManager.getCache("requestsCache");
     }
 
     @Override
