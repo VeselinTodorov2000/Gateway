@@ -22,6 +22,11 @@ public class ContextServiceImpl implements ContextService {
 
     @Override
     public String baseCurrency() {
+        String baseCurrencyFromCache = baseCurrencyFromCache();
+        return baseCurrencyFromCache != null ? baseCurrencyFromCache : "EUR";
+    }
+
+    private String baseCurrencyFromCache() {
         if (currencyRatesCache != null) {
             return currencyRatesCache.get("baseCurrency", String.class);
         }
