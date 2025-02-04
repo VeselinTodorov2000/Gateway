@@ -9,10 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.retry.annotation.Recover;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
@@ -41,7 +38,6 @@ public class FixerFetchServiceImpl implements FixerFetchService {
         );
     }
 
-    @Retryable
     private Optional<FixerResponseDto> fetchCurrencyRates() {
         try {
             ResponseEntity<FixerResponseDto> response = restTemplate.getForEntity(fixerApiUrl, FixerResponseDto.class);
@@ -54,10 +50,5 @@ public class FixerFetchServiceImpl implements FixerFetchService {
             logger.error("Error while fetching data from Fixer.io", e);
         }
         return Optional.empty();
-    }
-
-    @Recover
-    public void recover(RestClientException e) {
-        logger.error("Failed to fetch data after retries: {}", e.getMessage());
     }
 }
