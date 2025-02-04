@@ -41,7 +41,7 @@ class XmlFacadeImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        requestDto = new XmlRequestDto(); // Създаваме реален обект на DTO-то
+        requestDto = new XmlRequestDto(); 
 
         GetRequest getRequest = new GetRequest();
         getRequest.setCurrency("USD");
