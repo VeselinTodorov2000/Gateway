@@ -38,7 +38,7 @@ class XmlRestControllerTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);  // Инициализиране на моковете
+        MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(xmlRestController).build();
     }
 
